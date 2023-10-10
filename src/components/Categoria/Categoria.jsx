@@ -1,71 +1,46 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Box, Tooltip, Typography, styled } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
-import CardMedia from "@mui/material/CardMedia";
-import Container from "@mui/material/Container";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 import Slider from "react-slick";
+import { useState } from "react";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import Container from "@mui/material/Container";
+import TarjetaMovie from "../TarjetaMovie/TarjetaMovie";
+import { useEffect } from "react";
+import axios from "axios";
 
-const estilosCarrusel = {
-  maxWidth: "100%",
+//funcion para traer poster de la pelicula
+const urlImg = (posterPath) => {
+  return `https://image.tmdb.org/t/p/w500${posterPath}`;
 };
-
-const EstilosCard = styled(Card)`
-  width: 200;
-  height: 300;
-`;
+//funcion para traer datos de las peliculas
+const BASE_URL = "https://api.themoviedb.org/3/movie/";
+const API_KEY = "?api_key=ce63677590eefbef4c97a2425c2942d1&language=es-MX";
 
 export default function Categoria() {
-  const url = "https://api.themoviedb.org/3/movie/";
-  const llave = "?api_key=ce63677590eefbef4c97a2425c2942d1&language=es-MX";
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const datos = async () => {
+    async function fetchData() {
       try {
-        const respuesta = (await axios.get(url + "popular" + llave)).data
+        const respuesta = (await axios.get(BASE_URL + "popular" + API_KEY)).data
           .results;
         setData(respuesta);
       } catch (error) {
         console.log("error al obtener datos " + error);
       }
-    };
-    datos();
+    }
+    fetchData();
   }, []);
 
-  // const settings = {
-  //   // Configuración del carrusel
-  //   // dots: true,
-  //   // infinite: true,
-  //   // speed: 500,
-  //   // autoplaySpeed: 5000,
-  //   // slidesToShow: 7,
-  //   slidesToScroll: 1,
-  //   // centerMode: true,
-  //   // centerPadding: "60px",
-  //   // arrows: true,
-  //   autoplay: true,
-  //   // pauseOnHover: true,
-  //   className: "center",
-  //   centerMode: true,
-  //   infinite: true,
-  //   centerPadding: "60px",
-  //   slidesToShow: 7,
-  //   speed: 500,
-  //   focusOnSelect: true,
-  // };
-
   const settings = {
+    dots: false,
     slidesToScroll: 1,
     centerMode: true,
-    // slidesToShow: 5, // Puedes ajustar este número según tus necesidades
+    slidesToShow: 5,
     speed: 500,
     focusOnSelect: true,
+    arrows: true,
     responsive: [
       {
         breakpoint: 2560,
@@ -107,65 +82,42 @@ export default function Categoria() {
   };
 
   return (
-    <Container
-      maxWidth="xl"
-      style={{ maxWidth: "100%" }}
-      sx={{
-        backgroundColor: "secondary.main",
-        padding: 5,
-      }}
-    >
-      <Card
-        elevation={1}
-        sx={{ backgroundColor: "secondary.main", marginBottom: 2 }}
+    <>
+      <Container
+        maxWidth="xl"
+        style={{ maxWidth: "100%" }}
+        sx={{
+          backgroundColor: "secondary.main",
+          padding: 5,
+        }}
       >
-        <Typography variant="h6" color={"text.primary"}>
-          Populares
-        </Typography>
-      </Card>
-      <Card sx={{ backgroundColor: "secondary.main" }} elevation={0}>
-        <Slider {...settings}>
-          {data ? (
-            data.map(({ poster_path, id }) => (
-              <Card key={id} sx={{ maxWidth: 200, maxHeight: 300 }}>
-                <CardMedia
-                  component="img"
-                  src={`https://image.tmdb.org/t/p/w500${poster_path}`}
-                  sx={{ width: "100%", height: "100%" }}
-                />
-              </Card>
-            ))
-          ) : (
-            <>cargando...</>
-          )}
-        </Slider>
-      </Card>
-      {/* <Tooltip open placement="top" size="lg" variant="outlined">
-        <Box
-          sx={{
-            marginBottom: 2,
-            boxShadow: 1,
-            borderRadius: 5,
-            paddingLeft: 2,
-          }}
+        <Card
+          elevation={1}
+          sx={{ backgroundColor: "secondary.main", marginBottom: 2 }}
         >
-          <Typography variant="button">Populares</Typography>
-        </Box>
-      </Tooltip>
-      <Carousel responsive={responsive} swipeable infinite rtl>
-        {data.map((item) => (
-          <Card key={item.id} sx={{ maxWidth: 250, maxHeight: 350, margin: 1 }}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                alt={item.title}
-              />
-            </CardActionArea>
-          </Card>
-        ))}
-      </Carousel> */}
-    </Container>
+          <Typography variant="h6" color={"text.primary"}>
+            Populares
+          </Typography>
+        </Card>
+        <Card sx={{ backgroundColor: "secondary.main" }} elevation={0}>
+          <Slider {...settings}>
+            {data ? (
+              data.map(({ poster_path, id, title }) => (
+                <Container key={id}>
+                  <TarjetaMovie
+                    posterPath={urlImg(poster_path)}
+                    title={title}
+                    id={id}
+                  />
+                </Container>
+              ))
+            ) : (
+              <>cargando...</>
+            )}
+          </Slider>
+        </Card>
+      </Container>
+    </>
   );
 }
 // image.tmdb.org/t/p/w500

@@ -5,12 +5,12 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActionArea from "@mui/material/CardActionArea";
-import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Slider from "react-slick";
 import styled from "styled-components";
+import { Paper } from "@mui/material";
 
 const EstilosCardContent = styled(CardContent)`
   text-align: justify;
@@ -34,16 +34,6 @@ const EstilosCardContent = styled(CardContent)`
 
 export default function SlideBanner() {
   const [datos, setDatos] = useState();
-  const [open, setOpen] = useState(false);
-  const [contendio, setContenido] = useState("Probando Modal");
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   useEffect(() => {
     const obtenerDatos = async () => {
@@ -85,7 +75,7 @@ export default function SlideBanner() {
       <Slider {...settings}>
         {datos ? (
           datos.map(({ id, title, poster_path, backdrop_path, overview }) => (
-            <Container
+            <Paper
               key={id}
               sx={{
                 backgroundImage: `url(https://image.tmdb.org/t/p/w500${backdrop_path})`,
@@ -95,14 +85,15 @@ export default function SlideBanner() {
                 height: 500,
               }}
             >
-              <Container
-                style={{ maxWidth: "100%", padding: 0 }}
+              <Paper
+                // style={{ maxWidth: "100%", padding: 0 }}
                 sx={{
                   backgroundColor: "rgba(0,0,0,0.6)",
                   height: "100%",
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <Card
@@ -115,10 +106,7 @@ export default function SlideBanner() {
                     // margin: 2,
                   }}
                 >
-                  <CardActionArea
-                    sx={{ maxWidth: 250, maxHeight: 350 }}
-                    onClick={handleOpen}
-                  >
+                  <CardActionArea sx={{ maxWidth: 250, maxHeight: 350 }}>
                     <CardMedia
                       component="img"
                       src={`https://image.tmdb.org/t/p/w500${poster_path}`}
@@ -146,8 +134,8 @@ export default function SlideBanner() {
                     </Typography>
                   </EstilosCardContent>
                 </Card>
-              </Container>
-            </Container>
+              </Paper>
+            </Paper>
           ))
         ) : (
           <div>Cargando...</div>

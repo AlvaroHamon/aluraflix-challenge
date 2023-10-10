@@ -5,11 +5,11 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
-import AddToQueueIcon from "@mui/icons-material/AddToQueue";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 export default function NavListDrawer() {
   return (
-    <Box sx={{ width: 250, bgcolor: "lightgray" }}>
+    <Box sx={{ width: 250, bgcolor: "primary.main" }}>
       <nav>
         <List>
           <ListItem>
@@ -20,8 +20,8 @@ export default function NavListDrawer() {
           </ListItem>
           <ListItem>
             <ListItemButton>
-              <AddToQueueIcon sx={{ mr: 1 }} />
-              <ListItemText primary="Nuevo Video" />
+              <FavoriteIcon sx={{ mr: 1 }} />
+              <ListItemText primary="Favoritos" />
             </ListItemButton>
           </ListItem>
         </List>
